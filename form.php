@@ -3,7 +3,7 @@
             echo "
                 <form action='index.php' method='post'>
                 <input type='submit' id='InnovatieShow' name='InnovatieShow' value='Nieuw innovatie toevoegen'>
-                </form>";
+                </form><br>";
             echo "
                 <form action='index.php' method='post'>
                 <label for='categorie'>Categorie:</label><br>
@@ -14,23 +14,23 @@
             echo "
                 </select><br>
                 <input type='submit' value='Selecteer hier uw categorie'>
-                </form>";  
-                if(array_key_exists('like', $_POST)) {
-                    $Innovatie->updateRatingUp($innovatie['ID']);
-                }
-                else if(array_key_exists('dislike', $_POST)) {
-                    $Innovatie->updateRatingDown($innovatie['ID']);
-                }
+                </form>
+                <br>"; 
             echo "
                 <form action='index.php' method='post'>
+                <select name='rating'>
+                <option value='' disabled selected hidden>Sorteren op...</option>
+                <option value='hl'>Hoog naar Laag</option>
+                <option value='lh'>Laag naar Hoog</option>
+                </select><br>
                 <input type='submit' id='RatingSort' name='RatingSort' value='Sorteer op Rating'>
-                </form>";   
+                </form>";
         }
         else{
             echo "
                 <form action='index.php' method='post'>
                 <input type='submit' id='ShowInnovatie' name='ShowInnovatie' value='Show Innovaties'>
-                </form>";
+                </form><br>";
             echo "
                 <form action='index.php' method='post'>
                 <label for='user'>User:</label><br>
@@ -52,9 +52,15 @@
                 <label for="datum">Datum:</label><br>
                 <input type="date" id="datum" name="datum"><br>
                 <input type="submit">
-                </form>'; 
+                </form>
+                <br>'; 
             echo "
                 <form action='index.php' method='post'>
+                <select name='rating'>
+                <option value='' disabled selected hidden>Sorteren op...</option>
+                <option value='hl'>Hoog naar Laag</option>
+                <option value='lh'>Laag naar Hoog</option>
+                </select><br>
                 <input type='submit' id='RatingSort' name='RatingSort' value='Sorteer op Rating'>
                 </form>";
          }

@@ -16,7 +16,7 @@
         function getInnovaties($categorie){
             global $pdo;
     
-            $sql = 'SELECT innovatie.ID, user.Naam as user, innovatie, categorieën.naam as categorie, datum, rating 
+            $sql = 'SELECT innovatie.ID, user.Naam as user, innovatie, categorieën.naam as categorie, datum, ratingMin, ratingPlus 
             FROM innovatie
             INNER JOIN categorieën on innovatie.categorie = categorieën.ID
             INNER JOIN user on innovatie.user = user.ID

@@ -52,15 +52,24 @@ class Controller
         return $users;
     }
 
-    function getRating()
+    function getRating($ratingState)
     {
         global $pdo;
 
-        $sql = 'SELECT innovatie.ID, user.Naam as user, innovatie, categorieën.naam as categorie, datum, rating 
+        if($ratingState == 'hl'){
+            $sql = 'SELECT innovatie.ID, user.Naam as user, innovatie, categorieën.naam as categorie, datum, ratingMin, ratingPlus 
+                    FROM innovatie
+                    INNER JOIN categorieën on innovatie.categorie = categorieën.ID
+                    INNER JOIN user on innovatie.user = user.ID
+                    ORDER BY ratingPlus DESC';
+        }
+        elseif($ratingState == 'lh'){
+            $sql = 'SELECT innovatie.ID, user.Naam as user, innovatie, categorieën.naam as categorie, datum, ratingMin, ratingPlus 
                 FROM innovatie
                 INNER JOIN categorieën on innovatie.categorie = categorieën.ID
                 INNER JOIN user on innovatie.user = user.ID
-                ORDER BY rating';
+                ORDER BY ratingPlus ASC';
+        }
 
         $statement = $pdo->query($sql);
 
@@ -72,17 +81,46 @@ class Controller
                 echo "Categorie: ", $row['categorie'], "<br>";
                 echo "Innovatie: ", $row['innovatie'], "<br>";
                 echo "Datum: ", $row['datum'], "<br>";
-                echo "Rating: ", $row['rating'], "<br>";
+                echo "Like: ", $row['ratingPlus'], "<br>";
+                echo "Dislike: ", $row['ratingMin'], "<br>";
                 echo '
-                <form method="post">
+                <form method="post"><input type="hidden" name="id"
+                value="'.$row['ID'].'">
                 <input type="submit" name="like"
                 class="button" value="like" />
-         
+                </form>';
+
+                echo '
+                <form method="post"> <input type="hidden" name="id"
+                value="'.$row['ID'].'">
                 <input type="submit" name="dislike"
                 class="button" value="dislike" />
-                </form>';
-                
+                </form>';               
         }
+    }
+
+    function updateLike($ID){
+        global $pdo;
+
+        $sql = 'UPDATE innovatie SET ratingPlus = ratingPlus + 1 WHERE innovatie.ID = :id';
+
+        $statement = $pdo->prepare($sql);
+
+        $statement->execute([
+            ':id' => $ID
+        ]); 
+    }
+
+    function updateDislike($ID){
+        global $pdo;
+
+        $sql = 'UPDATE innovatie SET ratingMin = ratingMin + 1 WHERE innovatie.ID = :id';
+
+        $statement = $pdo->prepare($sql);
+
+        $statement->execute([
+            ':id' => $ID
+        ]); 
     }
 }
 

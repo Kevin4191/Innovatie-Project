@@ -6,7 +6,8 @@
         private $categorie;
         private $innovatie;
         private $datum;
-        private $rating;
+        private $ratingMin;
+        private $ratingPlus;
 
         function getId()
         {
@@ -58,22 +59,13 @@
             $this->datum=$datum;
         }
 
-        function getRating()
-        {
-            return $this->rating;
-        }
-
-        function setRating($rating)
-        {
-            $this->rating=$rating;
-        }
 
         function flush()
         {
             if(!empty($this->user) && !empty($this->datum) && !empty($this->categorie) && !empty($this->innovatie)){
                 global $pdo;
 
-                $sql = 'INSERT INTO innovatie(user, datum, categorie, innovatie, rating) VALUES(:user, :datum, :categorie, :innovatie, 0)';
+                $sql = 'INSERT INTO innovatie(user, datum, categorie, innovatie, ratingPlus, ratingMin) VALUES(:user, :datum, :categorie, :innovatie, 0, 0)';
 
                 $statement = $pdo->prepare($sql);
 
@@ -91,29 +83,6 @@
             }
         }
 
-        function updateRatingUp($ID){
-            global $pdo;
-
-            $sql = 'UPDATE innovatie SET rating = rating + 1 WHERE innovatie.ID = :id';
-
-            $statement = $pdo->prepare($sql);
-
-            $statement->execute([
-                ':id' => $ID
-            ]); 
-        }
-
-        function updateRatingDown($ID){
-            global $pdo;
-
-            $sql = 'UPDATE innovatie SET rating = rating - 1 WHERE innovatie.ID = :id';
-
-            $statement = $pdo->prepare($sql);
-
-            $statement->execute([
-                ':id' => $ID
-            ]); 
-        }
     }
     
 ?>
